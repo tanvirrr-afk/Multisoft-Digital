@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multisoft — Video Editing Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #080a0e;
+    --dark: #0d1117;
+    --card: #111720;
+    --card-hover: #16202e;
+    --border: rgba(255,255,255,0.07);
+    --border-active: rgba(99,210,255,0.3);
+    --cyan: #63d2ff;
+    --cyan-dim: rgba(99,210,255,0.12);
+    --cyan-glow: rgba(99,210,255,0.08);
+    --white: #f0f4f8;
+    --muted: #8a9bb0;
+    --faint: #3d4f63;
+    --font: 'Space Grotesk', sans-serif;
+    --mono: 'Space Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 0 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,10,14,0.85);
+    backdrop-filter: blur(20px);
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .logo span { color: var(--cyan); }
+
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    transition: color 0.2s;
+    text-transform: uppercase;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a.active { color: var(--cyan); }
+
+  .nav-cta {
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    background: transparent;
+    cursor: pointer;
+    font-family: var(--font);
+    text-transform: uppercase;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .nav-cta:hover {
+    background: var(--cyan);
+    color: var(--black);
+  }
+
+  /* ── PAGES ── */
+  .page { display: none; padding-top: 64px; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: calc(100vh - 64px);
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 6rem 5vw 4rem;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(99,210,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,210,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 0%, transparent 100%);
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    border: 1px solid var(--border-active);
+    padding: 6px 14px;
+    background: var(--cyan-dim);
+    margin-bottom: 2rem;
+    width: fit-content;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--white);
+    max-width: 900px;
+    margin-bottom: 2rem;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--cyan);
+    display: block;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+  }
+
+  .hero-actions {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    margin-bottom: 5rem;
+  }
+
+  .btn-primary {
+    padding: 14px 32px;
+    background: var(--cyan);
+    color: var(--black);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: #a0e8ff; }
+
+  .btn-ghost {
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    font-family: var(--font);
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.25); color: var(--white); }
+
+  .hero-stats {
+    display: flex; gap: 4rem; flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+    padding-top: 2.5rem;
+  }
+
+  .stat-item { display: flex; flex-direction: column; gap: 4px; }
+
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+
+  .stat-num span { color: var(--cyan); }
+
+  .stat-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--faint);
+  }
+
+  /* ── TICKER ── */
+  .ticker {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+    background: var(--dark);
+  }
+
+  .ticker-inner {
+    display: flex;
+    gap: 0;
+    animation: ticker 24s linear infinite;
+    width: max-content;
+  }
+
+  .ticker-item {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding: 0 40px;
+    display: flex; align-items: center; gap: 16px;
+  }
+
+  .ticker-item::after {
+    content: '×';
+    color: var(--cyan);
+    font-size: 10px;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── SECTION SHELL ── */
+  section {
+    padding: 6rem 5vw;
+    position: relative;
+  }
+
+  .section-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 1.25rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 1.25rem;
+    max-width: 700px;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 540px;
+    line-height: 1.75;
+    margin-bottom: 3.5rem;
+  }
+
+  /* ── SERVICES ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    border: 1px solid var(--border);
+    background: var(--border);
+  }
+
+  .service-card {
+    background: var(--dark);
+    padding: 2.5rem 2rem;
+    transition: background 0.25s;
+    cursor: default;
+  }
+
+  .service-card:hover { background: var(--card-hover); }
+
+  .service-icon {
+    width: 44px; height: 44px;
+    border: 1px solid var(--border-active);
+    background: var(--cyan-dim);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 20px;
+  }
+
+  .service-card h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .service-card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── PORTFOLIO ── */
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .portfolio-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .portfolio-item:hover { border-color: var(--border-active); }
+
+  .portfolio-thumb {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+  }
+
+  .portfolio-thumb .play-icon {
+    position: absolute;
+    width: 52px; height: 52px;
+    border: 2px solid var(--cyan);
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(99,210,255,0.1);
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .portfolio-item:hover .play-icon {
+    transform: scale(1.08);
+    background: rgba(99,210,255,0.22);
+  }
+
+  .play-icon::after {
+    content: '';
+    border-style: solid;
+    border-width: 8px 0 8px 16px;
+    border-color: transparent transparent transparent var(--cyan);
+    margin-left: 4px;
+  }
+
+  .portfolio-info {
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .portfolio-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 6px;
+  }
+
+  .portfolio-info h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .portfolio-info p {
+    font-size: 0.82rem;
+    color: var(--faint);
+  }
+
+  /* Coloured thumb backgrounds */
+  .thumb-1 { background: linear-gradient(135deg, #0d1b2a 0%, #1a2d45 100%); }
+  .thumb-2 { background: linear-gradient(135deg, #1a0d2a 0%, #2d1a45 100%); }
+  .thumb-3 { background: linear-gradient(135deg, #0d2a1b 0%, #1a4530 100%); }
+  .thumb-4 { background: linear-gradient(135deg, #2a1a0d 0%, #453020 100%); }
+  .thumb-5 { background: linear-gradient(135deg, #2a0d1b 0%, #451a30 100%); }
+  .thumb-6 { background: linear-gradient(135deg, #0d1b2a 0%, #0d2d2a 100%); }
+
+  /* ── PROCESS ── */
+  .process-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0;
+    border: 1px solid var(--border);
+    background: var(--border);
+  }
+
+  .process-step {
+    background: var(--dark);
+    padding: 2.5rem 2rem;
+    position: relative;
+  }
+
+  .process-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--faint);
+    margin-bottom: 1.25rem;
+  }
+
+  .process-step h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+
+  .process-step p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .process-line {
+    position: absolute;
+    top: 2.5rem;
+    right: 0;
+    width: 1px;
+    height: 24px;
+    background: var(--cyan);
+    opacity: 0.4;
+  }
+
+  /* ── PRICING ── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+  }
+
+  .pricing-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    transition: border-color 0.2s;
+  }
+
+  .pricing-card.featured {
+    border-color: var(--cyan);
+    position: relative;
+  }
+
+  .pricing-card.featured::before {
+    content: 'Most Popular';
+    position: absolute;
+    top: -1px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--cyan);
+    color: var(--black);
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 16px;
+  }
+
+  .pricing-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 0.75rem;
+  }
+
+  .pricing-price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+  }
+
+  .pricing-price sub {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--muted);
+    vertical-align: baseline;
+    margin-right: 2px;
+  }
+
+  .pricing-period {
+    font-size: 0.85rem;
+    color: var(--faint);
+    margin-bottom: 1.75rem;
+  }
+
+  .pricing-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin-bottom: 1.75rem;
+  }
+
+  .pricing-features {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 2rem;
+  }
+
+  .pricing-features li {
+    font-size: 0.9rem;
+    color: var(--muted);
+    display: flex; align-items: flex-start; gap: 10px;
+    line-height: 1.5;
+  }
+
+  .pricing-features li::before {
+    content: '✓';
+    color: var(--cyan);
+    font-family: var(--mono);
+    font-size: 12px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  .pricing-features li.dim::before { color: var(--faint); }
+  .pricing-features li.dim { opacity: 0.5; }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    nav .nav-links { display: none; }
+    .hero h1 { font-size: 2.5rem; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+  }
+
+  .about-visual {
+    aspect-ratio: 4/3;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-visual-inner {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(99,210,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,210,255,0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  .about-visual-label {
+    position: relative;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    text-align: center;
+  }
+
+  .about-visual-logo {
+    font-family: var(--mono);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--cyan);
+    opacity: 0.15;
+    position: absolute;
+    letter-spacing: 0.1em;
+  }
+
+  .about-list {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 20px;
+    margin-top: 2rem;
+  }
+
+  .about-list li {
+    display: flex; gap: 16px;
+    align-items: flex-start;
+  }
+
+  .about-list .icon-wrap {
+    width: 32px; height: 32px;
+    border: 1px solid var(--border-active);
+    background: var(--cyan-dim);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+  }
+
+  .about-list strong {
+    font-weight: 600;
+    color: var(--white);
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .about-list p {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── TEAM ── */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 3rem;
+  }
+
+  .team-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+
+  .team-avatar {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: var(--cyan-dim);
+    border: 2px solid var(--border-active);
+    margin: 0 auto 1.25rem;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--cyan);
+  }
+
+  .team-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .team-card .role {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 0.75rem;
+  }
+
+  .team-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── TESTIMONIALS ── */
+  .testimonial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 3rem;
+  }
+
+  .testimonial-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 2rem;
+  }
+
+  .testimonial-quote {
+    font-size: 0.95rem;
+    color: var(--white);
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .testimonial-quote::before { content: '"'; color: var(--cyan); }
+  .testimonial-quote::after { content: '"'; color: var(--cyan); }
+
+  .testimonial-author {
+    display: flex; align-items: center; gap: 12px;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  .testimonial-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--cyan-dim);
+    border: 1px solid var(--border-active);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--cyan);
+  }
+
+  .testimonial-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .testimonial-company {
+    font-size: 0.78rem;
+    color: var(--faint);
+  }
+
+  /* ── CONTACT ── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: flex-start;
+  }
+
+  @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
+
+  .contact-info { display: flex; flex-direction: column; gap: 2rem; }
+
+  .contact-item {
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+
+  .contact-icon {
+    width: 40px; height: 40px;
+    border: 1px solid var(--border-active);
+    background: var(--cyan-dim);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+  }
+
+  .contact-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 4px;
+  }
+
+  .contact-value {
+    font-size: 0.95rem;
+    color: var(--white);
+  }
+
+  .contact-form {
+    display: flex; flex-direction: column; gap: 16px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-field {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+
+  .form-field label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .form-field input,
+  .form-field textarea,
+  .form-field select {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 12px 14px;
+    font-family: var(--font);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .form-field select option { background: var(--dark); }
+
+  .form-field input:focus,
+  .form-field textarea:focus,
+  .form-field select:focus {
+    border-color: var(--cyan);
+  }
+
+  .form-field textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-brand {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--white);
+  }
+
+  .footer-brand span { color: var(--cyan); }
+
+  .footer-copy {
+    font-size: 12px;
+    color: var(--faint);
+    font-family: var(--mono);
+  }
+
+  /* ── GLOW ACCENT ── */
+  .glow-dot {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,210,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#" onclick="showPage('home')">MULTI<span>SOFT</span></a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+    <li><a href="#" onclick="showPage('services')" id="nav-services">Services</a></li>
+    <li><a href="#" onclick="showPage('portfolio')" id="nav-portfolio">Portfolio</a></li>
+    <li><a href="#" onclick="showPage('pricing')" id="nav-pricing">Pricing</a></li>
+    <li><a href="#" onclick="showPage('about')" id="nav-about">About</a></li>
+    <li><a href="#" onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="#" onclick="showPage('contact')">Get a Quote</a>
+</nav>
+
+<!-- ════════════════════════ HOME ════════════════════════ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="glow-dot" style="top:-100px; right:10%; opacity:0.8;"></div>
+
+    <div class="hero-badge">Video Editing Agency</div>
+
+    <h1>We Edit.<em>You Dominate.</em></h1>
+
+    <p class="hero-sub">
+      Multisoft turns raw footage into cinematic stories that convert viewers into customers. Precision cuts, motion graphics, and color science — all delivered on deadline.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn-primary" href="#" onclick="showPage('portfolio')">View Our Work</a>
+      <a class="btn-ghost" href="#" onclick="showPage('contact')">Start a Project →</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">250<span>+</span></div>
+        <div class="stat-label">Projects Delivered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">98<span>%</span></div>
+        <div class="stat-label">Client Retention</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">1<span>M</span></div>
+        <div class="stat-label">Views Generated</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">48<span>hr</span></div>
+        <div class="stat-label">Avg. Turnaround</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker">
+    <div class="ticker-inner">
+      <div class="ticker-item">Color Grading</div>
+      <div class="ticker-item">Motion Graphics</div>
+      <div class="ticker-item">Short Film Editing</div>
+      <div class="ticker-item">Social Media Content</div>
+      <div class="ticker-item">Ad Campaigns</div>
+      <div class="ticker-item">Documentary Cuts</div>
+      <div class="ticker-item">Corporate Video</div>
+      <div class="ticker-item">Color Grading</div>
+      <div class="ticker-item">Motion Graphics</div>
+      <div class="ticker-item">Short Film Editing</div>
+      <div class="ticker-item">Social Media Content</div>
+      <div class="ticker-item">Ad Campaigns</div>
+      <div class="ticker-item">Documentary Cuts</div>
+      <div class="ticker-item">Corporate Video</div>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-eyebrow">What We Do</div>
+    <div class="section-title">Every frame. Every beat. Every detail.</div>
+    <p class="section-desc">From quick social cuts to cinematic brand films, our editors bring technical precision and creative vision to every project.</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🎬</div>
+        <h3>Commercial & Ad Editing</h3>
+        <p>High-conversion edits for brands and campaigns. We pace for attention, hook within seconds, and drive action.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">✨</div>
+        <h3>Motion Graphics</h3>
+        <p>Animated titles, lower thirds, kinetic typography, and full-motion infographics built to your brand identity.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎨</div>
+        <h3>Color Grading</h3>
+        <p>Cinematic color science using DaVinci Resolve. We match, correct, and stylize to the exact mood your story demands.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📱</div>
+        <h3>Social Content</h3>
+        <p>Reels, Shorts, TikToks optimized for each platform. Formatted, captioned, and ready to publish at volume.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎥</div>
+        <h3>Documentary Editing</h3>
+        <p>Story structure, pacing, interview weaving, and archival integration — we craft compelling long-form narratives.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--dark);">
+    <div class="section-eyebrow">Trusted By</div>
+    <div class="section-title">Brands that move fast, choose us.</div>
+    <p class="section-desc">From indie creators to global brands, we work with clients who take their video seriously.</p>
+    <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: center;">
+      <div style="font-family: var(--mono); font-weight: 700; font-size: 1.1rem; color: var(--faint); letter-spacing: 0.08em;">BMW BANGLADESH</div>
+      <div style="font-family: var(--mono); font-weight: 700; font-size: 1.1rem; color: var(--faint); letter-spacing: 0.08em;">INSIGHT LEARNING</div>
+      <div style="font-family: var(--mono); font-weight: 700; font-size: 1.1rem; color: var(--faint); letter-spacing: 0.08em;">ROZA</div>
+      <div style="font-family: var(--mono); font-weight: 700; font-size: 1.1rem; color: var(--faint); letter-spacing: 0.08em;">GYANCHITRO</div>
+      <div style="font-family: var(--mono); font-weight: 700; font-size: 1.1rem; color: var(--faint); letter-spacing: 0.08em;">REDOVA</div>
+      <div style="font-family: var(--mono); font-weight: 700; font-size: 1.1rem; color: var(--faint); letter-spacing: 0.08em;">PRAXIS</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ════════════════════════ SERVICES ════════════════════════ -->
+<div class="page" id="page-services">
+  <section>
+    <div class="section-eyebrow">Services</div>
+    <div class="section-title">A full-service edit studio, minus the overhead.</div>
+    <p class="section-desc">Whether you ship one film a year or 200 social videos a month, we have a workflow that fits.</p>
+
+    <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+      <div class="service-card" style="padding: 3rem 2.5rem;">
+        <div class="service-icon" style="width:52px; height:52px; font-size:24px;">🎬</div>
+        <h3 style="font-size:1.15rem; margin-bottom: 1rem;">Commercial & Ad Editing</h3>
+        <p style="margin-bottom: 1.25rem;">High-conversion edits for brands, startups, and agencies. We pace for attention, hook within 2 seconds, and close with clarity.</p>
+      </div>
+      <div class="service-card" style="padding: 3rem 2.5rem;">
+        <div class="service-icon" style="width:52px; height:52px; font-size:24px;">✨</div>
+        <h3 style="font-size:1.15rem; margin-bottom: 1rem;">Motion Graphics & Animation</h3>
+        <p style="margin-bottom: 1.25rem;">Animated titles, kinetic type, explainer animations, and full brand identity motion systems. Style frames included.</p>
+      </div>
+      <div class="service-card" style="padding: 3rem 2.5rem;">
+        <div class="service-icon" style="width:52px; height:52px; font-size:24px;">🎨</div>
+        <h3 style="font-size:1.15rem; margin-bottom: 1rem;">Color Grading</h3>
+        <p style="margin-bottom: 1.25rem;">Professional color science in DaVinci Resolve. Primary correction, secondary refinement, LUT creation, and HDR delivery.</p>
+      </div>
+      <div class="service-card" style="padding: 3rem 2.5rem;">
+        <div class="service-icon" style="width:52px; height:52px; font-size:24px;">📱</div>
+        <h3 style="font-size:1.15rem; margin-bottom: 1rem;">Social Media Editing</h3>
+        <p style="margin-bottom: 1.25rem;">High-volume content repurposing for Reels, Shorts, TikTok, LinkedIn, and X. Auto-captions, format optimization, scheduling packs.</p>
+      </div>
+      <div class="service-card" style="padding: 3rem 2.5rem;">
+        <div class="service-icon" style="width:52px; height:52px; font-size:24px;">🎥</div>
+        <h3 style="font-size:1.15rem; margin-bottom: 1rem;">Documentary & Long-Form</h3>
+        <p style="margin-bottom: 1.25rem;">Story structure, pacing, interview weaving, b-roll integration, archival sourcing, and music licensing. We make people watch until the end.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--dark);">
+    <div class="section-eyebrow">Our Process</div>
+    <div class="section-title">Four steps. Zero confusion.</div>
+    <p class="section-desc">We've built a workflow that keeps projects moving and clients informed every step of the way.</p>
+
+    <div class="process-list">
+      <div class="process-step">
+        <div class="process-num">01 — Brief</div>
+        <h3>Project Intake</h3>
+        <p>You submit footage, brand guidelines, references, and a deadline. We ask clarifying questions and confirm scope within 24 hours.</p>
+        <div class="process-line"></div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">02 — Edit</div>
+        <h3>Assembly & Craft</h3>
+        <p>Our editors build the first assembly cut, apply color, add sound design, and deliver a review link — usually within 48 hours.</p>
+        <div class="process-line"></div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">03 — Review</div>
+        <h3>Feedback Loop</h3>
+        <p>You leave timestamped comments directly on the video. We action all revisions in the next round — two revision rounds included.</p>
+        <div class="process-line"></div>
+      </div>
+      <div class="process-step">
+        <div class="process-num">04 — Deliver</div>
+        <h3>Final Files</h3>
+        <p>You receive all export formats, project files, and licensed assets. Ready to upload, broadcast, or send to a distributor.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ════════════════════════ PORTFOLIO ════════════════════════ -->
+<div class="page" id="page-portfolio">
+  <section>
+    <div class="section-eyebrow">Portfolio</div>
+    <div class="section-title">The work speaks for itself.</div>
+    <p class="section-desc">A selection of recent projects across commercials, documentaries, social campaigns, and branded content.</p>
+
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 2.5rem;">
+      <button class="filter-btn active-filter" onclick="filterPortfolio('all', this)" style="padding: 6px 18px; background: var(--cyan-dim); border: 1px solid var(--border-active); color: var(--cyan); font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;">All</button>
+      <button class="filter-btn" onclick="filterPortfolio('commercial', this)" style="padding: 6px 18px; background: transparent; border: 1px solid var(--border); color: var(--faint); font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s;">Commercial</button>
+      <button class="filter-btn" onclick="filterPortfolio('social', this)" style="padding: 6px 18px; background: transparent; border: 1px solid var(--border); color: var(--faint); font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s;">Social</button>
+      <button class="filter-btn" onclick="filterPortfolio('documentary', this)" style="padding: 6px 18px; background: transparent; border: 1px solid var(--border); color: var(--faint); font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s;">Documentary</button>
+      <button class="filter-btn" onclick="filterPortfolio('branded', this)" style="padding: 6px 18px; background: transparent; border: 1px solid var(--border); color: var(--faint); font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s;">Branded</button>
+    </div>
+
+    <div class="portfolio-grid" id="portfolio-grid">
+      <div class="portfolio-item" data-cat="commercial">
+        <div class="portfolio-thumb thumb-1"><div class="play-icon"></div></div>
+        <div class="portfolio-info">
+          <div class="portfolio-tag">Commercial</div>
+          <h3>BMW X3</h3>
+        </div>
+      </div>
+      <div class="portfolio-item" data-cat="documentary">
+        <div class="portfolio-thumb thumb-2"><div class="play-icon"></div></div>
+        <div class="portfolio-info">
+          <div class="portfolio-tag">Documentary</div>
+          <h3>GYANCHITRO</h3>
+        </div>
+      </div>
+      <div class="portfolio-item" data-cat="social">
+        <div class="portfolio-thumb thumb-3"><div class="play-icon"></div></div>
+        <div class="portfolio-info">
+          <div class="portfolio-tag">Social</div>
+          <h3>ROZA</h3>
+        </div>
+      </div>
+      <div class="portfolio-item" data-cat="branded">
+        <div class="portfolio-thumb thumb-4"><div class="play-icon"></div></div>
+        <div class="portfolio-info">
+          <div class="portfolio-tag">Branded Content</div>
+          <h3>REDOVA</h3>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ════════════════════════ PRICING ════════════════════════ -->
+<div class="page" id="page-pricing">
+  <section>
+    <div class="section-eyebrow">Pricing</div>
+    <div class="section-title">Simple plans. No hidden render fees.</div>
+    <p class="section-desc">Monthly retainer plans for growing content teams. One-off projects? <a href="#" onclick="showPage('contact')" style="color: var(--cyan); text-decoration: none;">Request a custom quote →</a></p>
+
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-label">Starter</div>
+        <div class="pricing-price"><sub>$</sub>499</div>
+        <div class="pricing-period">per month · billed monthly</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li>Up to 8 videos per month</li>
+          <li>Max 3 min per video</li>
+          <li>Basic color correction</li>
+          <li>Captions & subtitles</li>
+          <li>2 revision rounds</li>
+          <li>48-hour turnaround</li>
+          <li class="dim">Motion graphics</li>
+          <li class="dim">Dedicated editor</li>
+          <li class="dim">Priority support</li>
+        </ul>
+        <a class="btn-ghost" href="#" onclick="showPage('contact')" style="display: block; text-align: center; padding: 12px;">Get Started</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-label">Growth</div>
+        <div class="pricing-price"><sub>$</sub>899</div>
+        <div class="pricing-period">per month · billed monthly</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li>Up to 24 videos per month</li>
+          <li>Max 10 min per video</li>
+          <li>Full color grading</li>
+          <li>Captions & subtitles</li>
+          <li>Unlimited revisions</li>
+          <li>24-hour turnaround</li>
+          <li>Motion graphics included</li>
+          <li>Dedicated editor</li>
+          <li class="dim">Priority support</li>
+        </ul>
+        <a class="btn-primary" href="#" onclick="showPage('contact')" style="display: block; text-align: center; padding: 12px;">Get Started</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-label">Studio</div>
+        <div class="pricing-price"><sub>$</sub>1,299</div>
+        <div class="pricing-period">per month · billed monthly</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li>Unlimited videos</li>
+          <li>Unlimited length</li>
+          <li>Cinematic color grading</li>
+          <li>Captions & subtitles</li>
+          <li>Unlimited revisions</li>
+          <li>Same-day turnaround</li>
+          <li>Motion graphics & VFX</li>
+          <li>Dedicated senior editor</li>
+          <li>Priority 24/7 support</li>
+        </ul>
+        <a class="btn-ghost" href="#" onclick="showPage('contact')" style="display: block; text-align: center; padding: 12px;">Get Started</a>
+      </div>
+    </div>
+
+    <div style="margin-top: 3rem; padding: 2rem; background: var(--card); border: 1px solid var(--border); max-width: 700px;">
+      <div style="font-family: var(--mono); font-size: 11px; color: var(--cyan); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.75rem;">Not sure which plan?</div>
+      <p style="color: var(--muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1.25rem;">Tell us your monthly volume, average video length, and content type. We'll recommend the right plan — or build a custom one around your specific pipeline.</p>
+      <a class="btn-primary" href="#" onclick="showPage('contact')" style="font-size: 13px; padding: 10px 24px;">Talk to us →</a>
+    </div>
+  </section>
+
+</div>
+
+<!-- ════════════════════════ ABOUT ════════════════════════ -->
+<div class="page" id="page-about">
+  <section>
+    <div class="about-grid">
+      <div>
+        <div class="section-eyebrow">About Multisoft</div>
+        <div class="section-title">Built by editors, for people who ship.</div>
+        <p class="section-desc">We started Multisoft because we were tired of agencies that treat video like a checkbox. Every project here gets real editorial thinking — not templates.</p>
+
+        <ul class="about-list">
+          <li>
+            <div class="icon-wrap">🎬</div>
+            <div>
+              <strong>Founded in 2023</strong>
+              <p>Started as a two-person edit bay in Dhaka. Now a 20-person studio serving clients across 30 countries.</p>
+            </div>
+          </li>
+          <li>
+            <div class="icon-wrap">⚡</div>
+            <div>
+              <strong>Speed without compromise</strong>
+              <p>We've built internal systems — asset libraries, style guides, delivery pipelines — that let us move fast without cutting corners on craft.</p>
+            </div>
+          </li>
+          <li>
+            <div class="icon-wrap">🌍</div>
+            <div>
+              <strong>Fully async, globally distributed</strong>
+              <p>Our editors work across time zones so your project is always moving — even while you sleep.</p>
+            </div>
+          </li>
+          <li>
+            <div class="icon-wrap">🔒</div>
+            <div>
+              <strong>NDA-first, always</strong>
+              <p>Every project is covered by a mutual NDA before a single file is shared. Your unreleased content stays unreleased.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="about-visual">
+        <div class="about-visual-inner"></div>
+        <div class="about-visual-logo">MS</div>
+        <div class="about-visual-label">
+          Multisoft Edit Studio<br>
+          <span style="font-size: 9px; opacity: 0.5;">EST. 2019 · DHAKA → WORLDWIDE</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: var(--dark);">
+    <div class="section-eyebrow">The Team</div>
+    <div class="section-title">The people behind the cut.</div>
+
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">RH</div>
+        <h3>Tanvir Chowdhury</h3>
+        <div class="role">Founder CEO</div>
+        <p>7 years editing across film, TV, and brand work. Obsessed with gaming and editing</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">SK</div>
+        <h3>Alvee Hossain</h3>
+        <div class="role">Senior Colorist</div>
+        <p>DaVinci Resolve certified. Former colorist at a Dhaka post-production house. Specializes in skin tone and genre looks.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">TM</div>
+        <h3>Asif Islam</h3>
+        <div class="role">Motion Graphics Lead</div>
+        <p>After Effects & Cinema 4D. Designs motion systems from scratch — never from a template pack.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">NI</div>
+        <h3>Isteaque Ahmed</h3>
+        <div class="role">Head of Production</div>
+        <p>Keeps every project on schedule, on brief, and on budget. The reason clients come back.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ════════════════════════ CONTACT ════════════════════════ -->
+<div class="page" id="page-contact">
+  <section>
+    <div class="section-eyebrow">Contact</div>
+    <div class="section-title">Let's talk about your project.</div>
+    <p class="section-desc">Fill out the form and we'll get back to you within one business day with a plan, a price, and a timeline.</p>
+
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">📧</div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-value">workforchowdhury@gmail.com</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-label">Phone / WhatsApp</div>
+            <div class="contact-value">+880 1610465559</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-label">Studio</div>
+            <div class="contact-value">Gulshan, Dhaka, Bangladesh</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">⏱️</div>
+          <div>
+            <div class="contact-label">Response Time</div>
+            <div class="contact-value">Within 24 business hours</div>
+          </div>
+        </div>
+
+        <div style="padding: 1.5rem; background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--cyan);">
+          <div style="font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--cyan); text-transform: uppercase; margin-bottom: 8px;">Rush projects?</div>
+          <p style="font-size: 0.875rem; color: var(--muted); line-height: 1.65;">We can handle same-day turnarounds for an additional fee. Mention your deadline in the form and we'll tell you if we can make it happen.</p>
+        </div>
+      </div>
+
+      <form class="contact-form" onsubmit="submitForm(event)">
+        <div class="form-row">
+          <div class="form-field">
+            <label>First Name</label>
+            <input type="text" placeholder="Asif">
+          </div>
+          <div class="form-field">
+            <label>Last Name</label>
+            <input type="text" placeholder="Mahmud">
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" placeholder="asifmahmud@gmail.com">
+        </div>
+        <div class="form-field">
+          <label>Company / Brand</label>
+          <input type="text" placeholder="Your company name">
+        </div>
+        <div class="form-field">
+          <label>Service Needed</label>
+          <select>
+            <option value="" disabled selected>Select a service</option>
+            <option>Commercial & Ad Editing</option>
+            <option>Motion Graphics</option>
+            <option>Color Grading</option>
+            <option>Social Media Editing</option>
+            <option>Documentary Editing</option>
+            <option>Monthly Retainer</option>
+            <option>Not sure — need advice</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Monthly Video Volume</label>
+          <select>
+            <option value="" disabled selected>How many videos per month?</option>
+            <option>1–5 videos</option>
+            <option>6–20 videos</option>
+            <option>21–50 videos</option>
+            <option>50+ videos</option>
+            <option>One-off project</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Project Details</label>
+          <textarea placeholder="Describe your project, timeline, and any reference videos you have in mind..."></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="width: 100%; padding: 16px; font-size: 14px; border: none; cursor: pointer;">Send Message →</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-brand">MULTI<span>SOFT</span></div>
+    <div class="footer-copy">© 2025 Multisoft. All rights reserved.</div>
+  </footer>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const navLink = document.getElementById('nav-' + id);
+  if (navLink) navLink.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  event && event.preventDefault();
+}
+
+function filterPortfolio(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.style.background = 'transparent';
+    b.style.borderColor = 'var(--border)';
+    b.style.color = 'var(--faint)';
+    b.classList.remove('active-filter');
+  });
+  btn.style.background = 'var(--cyan-dim)';
+  btn.style.borderColor = 'var(--border-active)';
+  btn.style.color = 'var(--cyan)';
+  btn.classList.add('active-filter');
+
+  document.querySelectorAll('.portfolio-item').forEach(item => {
+    if (cat === 'all' || item.dataset.cat === cat) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+function submitForm(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type=submit]');
+  btn.textContent = 'Message Sent ✓';
+  btn.style.background = '#1a4530';
+  btn.style.color = '#5dcaa5';
+  btn.disabled = true;
+}
+</script>
+
+</body>
+</html>
